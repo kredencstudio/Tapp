@@ -1,0 +1,66 @@
+mayaMat_to_aiStandard
+
+Copyright 2012 Dennis SH Lai
+dshlai@gmail.com
+
+----
+
+
+Summary
+
+Replace Maya Standard material with MtoA aiStandard material
+URL: http://dennispython.blogspot.tw/
+
+----
+
+Install
+
+Extract content into a where Maya can source the script files, i.e., Maya's script path. 
+
+You can save the run script into Shelf as well.
+
+----
+
+Usage
+
+--
+the convert() function
+--
+
+First import the package.
+Select the shaders you intented to convert in Hypershade.
+Run the convert function.
+
+For example:
+
+import mayaMat_to_aiStandard as mMat2Ai
+mMat2Ai.convert()
+
+--
+the trimTexPath() function
+--
+
+This utility function will trim the absolte path of the texture file in the selected texture node into relative path. It will only keep the last folder one level up from the texture file.(e.g., sourceiamges/texture_file.tif)
+
+Import package.
+Select the texture read node in Hypershade.
+run the trimTexPath function.
+
+For example:
+
+import mayaMat_to_aiStandard as mMat2Ai
+mMat2Ai.trimTexPath()
+
+before trim: /home/user/tex/some_folder/sourceimages/texture_file.tif
+after trim: sourceimages/texture_file.tif
+
+--
+batch_aiSubdiv function
+--
+
+batch change arnold subdiv type.
+
+import mayaMat_to_aiStandard as mMat2Ai
+mMat2Ai.batch("catclark")
+
+list of arguments: "catclark", "linear", "none"

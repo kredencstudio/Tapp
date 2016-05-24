@@ -1,0 +1,1 @@
+pyside-uic dialog.ui > dialog.py

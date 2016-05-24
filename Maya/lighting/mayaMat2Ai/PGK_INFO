@@ -1,0 +1,10 @@
+Metadata-Version: 0.1
+Name: mayaMat2Ai
+Version: 0.1
+Summary: Replace Maya Standard material with MtoA aiStandard material
+URL: http://dennispython.blogspot.tw/
+Author: Dennis SH Lai
+Author-email: dshlai@gmail.com
+License: GPL
+Description: From Maya embedded Python interpreter
+Platform: Windows, 
