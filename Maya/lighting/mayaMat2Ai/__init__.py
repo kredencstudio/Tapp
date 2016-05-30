@@ -37,7 +37,7 @@ def convert(type='aiStandard', proxy=False):
         else:
             matMaya = node
 
-    mats.add(matMaya)
+            mats.add(matMaya)
     print mats
 
     if cmds.pluginInfo('mtoa.mll', query=True, l=True):
