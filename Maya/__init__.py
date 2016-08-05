@@ -13,16 +13,9 @@ print 'Tapp.Maya imported!'
 #creating menu
 import menu
 
-#framerate prompting
-#import utils.framerate as uf
-
-#uf.FrameratePrompt()
 
 #setting project
 cmds.evalDeferred('import Tapp.Maya.utils.setProject')
-
-#load plugins
-cmds.evalDeferred('import Tapp.Maya.plugins')
 
 #opening Tapp
 cmds.evalDeferred('import Tapp.Maya.gui as gui;win=gui.Window();win.show()')
