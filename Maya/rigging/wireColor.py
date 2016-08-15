@@ -1,16 +1,17 @@
 import pymel.core as pm
 import maya.OpenMayaUI as omui
-from PySide import QtGui, QtCore
-from shiboken import wrapInstance
+from Qt import QtGui, QtCore, QtWidgets
 
 
 def maya_main_window():
+    """Return Maya's main window"""
+    for obj in QtWidgets.qApp.topLevelWidgets():
+        if obj.objectName() == 'MayaWindow':
+            return obj
+    raise RuntimeError('Could not find MayaWindow instance')
 
-    main_window_ptr = omui.MQtUtil.mainWindow()
-    return wrapInstance(long(main_window_ptr), QtGui.QWidget)
 
-
-class MPalette(QtGui.QDialog):
+class MPalette(QtWidgets.QDialog):
 
     def __init__(self, parent=None):
         super(MPalette, self).__init__(parent)
@@ -24,12 +25,12 @@ class MPalette(QtGui.QDialog):
 
     def setupUi(self):
         self.setWindowTitle("ColorPicker")
-        self.gridLayout = QtGui.QGridLayout(self)
+        self.gridLayout = QtWidgets.QGridLayout(self)
         self.buttons = list()
         for i in range(31):
-            btn = QtGui.QPushButton(self)
-            sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum,
-                                           QtGui.QSizePolicy.Maximum)
+            btn = QtWidgets.QPushButton(self)
+            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum,
+                                           QtWidgets.QSizePolicy.Maximum)
             sizePolicy.setHorizontalStretch(0)
             sizePolicy.setVerticalStretch(0)
             sizePolicy.setHeightForWidth(

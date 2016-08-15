@@ -1,5 +1,4 @@
-from PySide import QtGui
-from shiboken import wrapInstance
+from Qt import QtWidgets
 
 import maya.cmds as cmds
 import maya.OpenMayaUI as omui
@@ -18,12 +17,14 @@ reload(dialog)
 
 
 def maya_main_window():
+    """Return Maya's main window"""
+    for obj in QtWidgets.qApp.topLevelWidgets():
+        if obj.objectName() == 'MayaWindow':
+            return obj
+    raise RuntimeError('Could not find MayaWindow instance')
 
-    main_window_ptr = omui.MQtUtil.mainWindow()
-    return wrapInstance(long(main_window_ptr), QtGui.QWidget)
 
-
-class Window(QtGui.QMainWindow, dialog.Ui_MainWindow):
+class Window(QtWidgets.QMainWindow, dialog.Ui_MainWindow):
 
     def __init__(self, parent=maya_main_window()):
         super(Window, self).__init__(parent)

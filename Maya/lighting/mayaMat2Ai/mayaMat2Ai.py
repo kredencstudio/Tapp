@@ -139,19 +139,19 @@ class mayaMat2Ai():
             self.reconnectShadingNetwork2(newNode, mayaMat, connectDict)
 
 
-            cmds.setAttr(newNode + SpecWeight, 1)
-            cmds.setAttr(newNode + SpecFresnel, 1)
+            cmds.setAttr(newNode + self.aiSpecWeight, 1)
+            cmds.setAttr(newNode + self.aiSpecFresnel, 1)
 
             for attr in attrList:
 
                 if attr[0] == ".specularColor":
-                    cmds.setAttr(newNode + specColor,
+                    cmds.setAttr(newNode + self.aiSpecColor,
                                  attr[1][0][0], attr[1][0][1], attr[1][0][2],
                                  type="double3")
 
                 if attr[0] == ".cosinePower":
                     if attr[1] > 0:
-                        cmds.setAttr(newNode + SpecRoughness,
+                        cmds.setAttr(newNode + self.aiSpecRoughness,
                                      1 / attr[1])
 
             self.convertEmission(attrList, newNode)

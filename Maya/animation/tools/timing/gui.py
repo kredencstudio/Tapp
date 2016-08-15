@@ -17,8 +17,8 @@ multiple objects
 
 import time
 
-from PySide import QtGui
-from PySide import QtCore
+from Qt import QtGui
+from Qt import QtCore
 from shiboken import wrapInstance
 
 import maya.cmds as cmds

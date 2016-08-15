@@ -1,6 +1,6 @@
 # coding : utf-8
 # Copyright (C) auto alembic shader assign tool
-# 
+#
 # File: alembic_mtl.py
 #
 #
@@ -45,8 +45,9 @@ class AssignShapeMtl():
             sdata.name = sh.split('|')[-1]
             sdata.full_shape = shapes[0]
             sdata.shape = shapes[0].split('|')[-1]
-            
+
             sdata.polyCount = cmds.polyEvaluate(shapes[0], f=1)
+            print sdata.polyCount
             sha_list = self.getAllShader(shapes[0])
 
             sdata.shader_list = sha_list
@@ -86,13 +87,14 @@ class AssignShapeMtl():
         return len(self.shaded_shapes)
 
     def findSameCountFaces(self, sdata):
-        rnt_list = [x for x in self.default_shapes if x.polyCount == sdata.polyCount]
+        rnt_list = self.default_shapes
+        # rnt_list = [x for x in self.default_shapes if x.polyCount == sdata.polyCount]
         return rnt_list
 
     def assignShadeToDefault(self, shaded_, default_):
         for sh in shaded_.shader_list:
             cmds.hyperShade(o= sh)
-            
+
             sel_list = cmds.ls(sl=1, allPaths=1)
             if not sel_list:
                 return
@@ -101,11 +103,11 @@ class AssignShapeMtl():
 
             if [x for x in sel_list if '.f[' in x]:
                 print 'f mode'
-                clean_list = [x.replace(shaded_.full_name, default_.full_name) for x in sel_list 
+                clean_list = [x.replace(shaded_.full_name, default_.full_name) for x in sel_list
                               if shaded_.name ]
             else:
                 print 'g mode'
-                clean_list = [x.replace(shaded_.full_shape, default_.full_shape) for x in sel_list 
+                clean_list = [x.replace(shaded_.full_shape, default_.full_shape) for x in sel_list
                               if shaded_.shape in x]
             #print 'clean', clean_list
             cmds.select(clean_list)
@@ -156,6 +158,3 @@ class AssignMtlCtl(AssignShapeMtl):
 
                             self.assignShadeToDefault(sh, sha)
         cmds.select(assign_list, r=1)
-
-
-

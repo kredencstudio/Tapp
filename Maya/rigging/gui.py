@@ -3,8 +3,7 @@ import os
 import maya.mel as mel
 import maya.OpenMayaUI as omui
 
-from PySide import QtGui
-from shiboken import wrapInstance
+from Qt import QtWidgets
 
 from .resources import dialog
 from . import spherePreview
@@ -13,11 +12,15 @@ from . import wireColor
 
 
 def maya_main_window():
-    main_window_ptr = omui.MQtUtil.mainWindow()
-    return wrapInstance(long(main_window_ptr), QtGui.QWidget)
+    """Return Maya's main window"""
+    for obj in QtWidgets.qApp.topLevelWidgets():
+        if obj.objectName() == 'MayaWindow':
+            return obj
+    raise RuntimeError('Could not find MayaWindow instance')
 
 
-class Window(QtGui.QMainWindow, dialog.Ui_MainWindow):
+
+class Window(QtWidgets.QMainWindow, dialog.Ui_MainWindow):
 
     def __init__(self, parent=maya_main_window()):
         super(Window, self).__init__(parent)

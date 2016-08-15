@@ -15,5 +15,5 @@ appname=filename.split('.')[0]
 if appname=='maya':
     import Tapp.Maya
 
-if appname=='Nuke6' or appname=='Nuke7':
+if 'Nuke' in appname:
     import Tapp.Nuke

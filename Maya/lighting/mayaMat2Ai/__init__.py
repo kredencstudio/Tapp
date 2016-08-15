@@ -31,13 +31,17 @@ def convert(type='aiStandard', proxy=False):
     for node in sl:
         nodeType = cmds.ls(node, showType=1)[1]
         if nodeType in ['transform', 'mesh']:
+            print nodeType
             shape = cmds.ls(node, s=1, dag=1)
+            print shape
             SgNodes = cmds.listConnections(shape, type='shadingEngine')
+            print SgNodes
             matMaya = cmds.listConnections(SgNodes[0] + '.surfaceShader')[0]
+            print matMaya
         else:
             matMaya = node
 
-            mats.add(matMaya)
+        mats.add(matMaya)
     print mats
 
     if cmds.pluginInfo('mtoa.mll', query=True, l=True):

@@ -62,10 +62,37 @@ def Import():
 
     if files:
         for f in files:
-            filename = os.path.basename(f)
+            filename = os.path.splitext(os.path.basename(f))[0]
+            groupname = filename + '_grp'
             newNodes = cmds.file(f, reference=True, namespace=filename,
-                                 groupReference=True, groupName='NewReference',
+                                 groupReference=True, groupName=groupname,
                                  returnNewNodes=True)
+            refNode = pm.FileReference(f).refNode
+            print refNode
+
+            assets = set()
+            new_namespace = 'assets'
+            for node in newNodes:
+                node = pm.PyNode(node)
+                if node.hasAttr('assetid'):
+                    assetid = node.assetid.get()
+                    asset_name = assetid.split('/')[0]
+                    assets.add(asset_name)
+
+            if len(assets) == 1:
+                asset = list(assets)[0]
+                i = 1
+                while pm.namespace(ex='{}_{}'.format(asset, (str(i).zfill(2)))):
+                    i+=1
+                new_namespace = '{}_{}'.format(asset, (str(i).zfill(2)))
+                new_group = new_namespace + '_grp'
+                ns = filename.replace('.', '_')
+                pm.namespace(ren=(ns, new_namespace))
+                pm.rename(groupname, new_group)
+                refNode.unlock()
+                pm.rename(refNode, new_namespace + 'RN')
+                refNode.lock()
+
 
             for node in newNodes:
                 if node == '|NewReference':

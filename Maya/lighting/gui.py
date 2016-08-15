@@ -5,8 +5,8 @@ import maya.mel as mel
 import pymel.core as pm
 import maya.OpenMayaUI as omui
 
-from PySide import QtGui
-from shiboken import wrapInstance
+from Qt import QtWidgets
+# from shiboken import wrapInstance
 
 from .resources import dialog
 from Tapp.Maya.lighting.alembic import utils
@@ -14,11 +14,14 @@ import Tapp.Maya.lighting.arnold as mla
 
 
 def maya_main_window():
-    main_window_ptr = omui.MQtUtil.mainWindow()
-    return wrapInstance(long(main_window_ptr), QtGui.QWidget)
+    """Return Maya's main window"""
+    for obj in QtWidgets.qApp.topLevelWidgets():
+        if obj.objectName() == 'MayaWindow':
+            return obj
+    raise RuntimeError('Could not find MayaWindow instance')
 
 
-class Window(QtGui.QMainWindow, dialog.Ui_MainWindow):
+class Window(QtWidgets.QMainWindow, dialog.Ui_MainWindow):
 
     def __init__(self, parent=maya_main_window()):
         super(Window, self).__init__(parent)
@@ -88,12 +91,13 @@ class Window(QtGui.QMainWindow, dialog.Ui_MainWindow):
         utils.Export()
 
     def on_importAlembic_pushButton_released(self):
-
+        reload(utils)
         utils.Import()
 
     def on_connectAlembic_pushButton_released(self):
-
-        utils.Connect()
+        reload(utils)
+        sel = pm.ls(sl=True)
+        utils.Connect(sel[0], sel[1])
 
     def on_addRimLight_pushButton_released(self):
 
@@ -166,7 +170,7 @@ class Window(QtGui.QMainWindow, dialog.Ui_MainWindow):
 
 def show():
     #closing previous dialog
-    for widget in QtGui.qApp.allWidgets():
+    for widget in QtWidgets.qApp.allWidgets():
         if widget.objectName() == 'tapp_lighting':
             widget.close()
 

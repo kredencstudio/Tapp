@@ -9,7 +9,7 @@ import maya.OpenMayaUI as omu
 
 import shiboken
 import pysideuic
-from PySide import QtGui, QtCore
+from Qt import QtGui, QtCore
 
 import Tapp.Maya.settings as ms
 import Tapp.Maya.utils as mu
