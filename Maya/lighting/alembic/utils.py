@@ -56,9 +56,11 @@ def Import():
 
     loadAlembic()
 
+    directory = pm.workspace.path
+
     fileFilter = "Alembic Files (*.abc)"
     files = pm.fileDialog2(fileFilter=fileFilter, dialogStyle=1,
-                           fileMode=4)
+                           fileMode=4, dir=directory)
 
     if files:
         for f in files:
