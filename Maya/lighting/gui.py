@@ -83,6 +83,7 @@ class Window(QtWidgets.QMainWindow, dialog.Ui_MainWindow):
 
     def transferShading_pushButton_released(self):
         import alembic_mtl
+        reload(alembic_mtl)
         amtl = alembic_mtl.AssignMtlCtl()
         amtl.selectAllCtl()
 
