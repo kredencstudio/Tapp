@@ -7,129 +7,229 @@
 # import aiCreateAttr
 # aiCreateAttr.windowADD()
 
-import maya.cmds as cmds
+
+import pymel.core as pm
+import random as rand
 from functools import partial
 
+def randCol():
+    c1 = rand.uniform(0,1)
+    c2 = rand.uniform(0,1)
+    c3 = rand.uniform(0,1)
+    return (c1,c2,c3)
+
+def genMat(*args):
+    selected = pm.ls(sl=1,long=1)
+
+    matName= 'master_attr_mat'
+    existAttrMat = pm.ls((matName),materials=True)
+    masterMat = False
+
+    if (len(existAttrMat) ==0):
+        rn1 = rand.uniform(0,1)
+        rn2 = rand.uniform(0,1)
+        rn3 = rand.uniform(0,1)
+        masterMat = pm.shadingNode( 'aiStandard',name=matName, asShader=True )
+        pm.setAttr ( (masterMat + '.color'), rn1, rn2, rn3, type = 'double3' )
+
+        diffTexStr = pm.shadingNode('aiUserDataString', name='diffTexAttr',asUtility=True)
+        pm.setAttr ((diffTexStr + '.stringAttrName'), 'diffTex', type = 'string')
+        diffTexFile = pm.shadingNode('file', name='diffTexFile',asTexture=True)
+        pm.connectAttr((diffTexStr +'.outValue'), (diffTexFile +'.fileTextureName'))
+        diffTexCol = pm.shadingNode('aiUserDataColor', name='diffColAttr',asTexture=True)
+        pm.setAttr ((diffTexCol + '.colorAttrName'), 'diffCol', type = 'string')
+        pm.setAttr ((diffTexCol + '.defaultValue'), (rand.uniform(0,1)),(rand.uniform(0,1)),(rand.uniform(0,1)), type = 'double3')
+        diffTexBool = pm.shadingNode('aiUserDataBool', name='diffTexBool',asUtility=True)
+        pm.setAttr ((diffTexBool + '.boolAttrName'), 'diffTexTog', type = 'string')
+        pm.setAttr ((diffTexBool + '.defaultValue'), False)
+        diffTexSwitch = pm.shadingNode('colorCondition', name='useDiffTex',asUtility=True)
+        pm.connectAttr((diffTexFile +'.outColor'), (diffTexSwitch +'.colorA'))
+        pm.connectAttr((diffTexFile +'.outAlpha'), (diffTexSwitch +'.alphaA'))
+        pm.connectAttr((diffTexCol +'.outColor'), (diffTexSwitch +'.colorB'))
+        pm.connectAttr((diffTexCol +'.outTransparencyR'), (diffTexSwitch +'.alphaB'))
+        pm.connectAttr((diffTexBool +'.outValue'), (diffTexSwitch +'.condition'))
+
+
+        pm.connectAttr((diffTexSwitch +'.outColor'), (masterMat +'.color'))
+        pm.connectAttr((diffTexSwitch +'.outTransparency'), (masterMat +'.opacity'))
+    else:
+        masterMat = existAttrMat[0]
+    for member in selected:
+    	pm.select(member)
+        pm.hyperShade(member,assign=masterMat )
+
+    pm.select(selected)
+#genMat()
+
+
+def connectMat(*args):
+    pass
+
 def addFloatAttr(*args):
-    floatAttrName = cmds.textFieldGrp( 'floatText', q = True, text = True ).split(' ')
-    cmds.pickWalk( d = "down" )
-    selected = cmds.ls(sl=1,long=1)
+    floatAttrName = pm.textFieldGrp( 'floatText', q = True, text = True ).split(' ')
+    pm.pickWalk( d = "down" )
+    selected = pm.ls(sl=1,long=1)
     for member in selected:
         for i in floatAttrName:
-            if cmds.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
+            if pm.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
                 print 'attribute ' + i + ' already exist!'
             else:
-                cmds.addAttr(member, ln = "mtoa_constant_" + i, nn = i, dv =1)
+                pm.addAttr(member, ln = "mtoa_constant_" + i, nn = i,hasMaxValue=False,hasMinValue=False, dv =1.0,smn=0, smx=9)
 
 def delFloatAttr(*args):
-    floatAttrName = cmds.textFieldGrp( 'floatText', q = True, text = True ).split(' ')
-    cmds.pickWalk( d = "down" )
-    selected = cmds.ls(sl=1,long=1)
+    floatAttrName = pm.textFieldGrp( 'floatText', q = True, text = True ).split(' ')
+    pm.pickWalk( d = "down" )
+    selected = pm.ls(sl=1,long=1)
     for member in selected:
         for i in floatAttrName:
-            if cmds.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
-                cmds.deleteAttr(member + '.mtoa_constant_' + i)
+            if pm.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
+                pm.deleteAttr(member + '.mtoa_constant_' + i)
             else:
                 print 'attribute ' + i + ' not exist!'
 
 def addStringAttr(*args):
-    stringAttrName = cmds.textFieldGrp( 'stringText', q = True, text = True ).split(' ')
-    cmds.pickWalk( d = "down" )
-    selected = cmds.ls(sl=1,long=1)
+    stringAttrName = pm.textFieldGrp( 'stringText', q = True, text = True ).split(' ')
+    pm.pickWalk( d = "down" )
+    selected = pm.ls(sl=1,long=1)
     for member in selected:
         for i in stringAttrName:
-            if cmds.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
+            if pm.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
                 print 'attribute ' + i + ' already exist!'
             else:
-                cmds.addAttr(member, ln = "mtoa_constant_" + i, nn = i, dt = 'string')
+                pm.addAttr(member, ln = "mtoa_constant_" + i, nn = i, dt = 'string')
 def delStringAttr(*args):
-    floatAttrName = cmds.textFieldGrp( 'stringText', q = True, text = True ).split(' ')
-    cmds.pickWalk( d = "down" )
-    selected = cmds.ls(sl=1,long=1)
+    floatAttrName = pm.textFieldGrp( 'stringText', q = True, text = True ).split(' ')
+    pm.pickWalk( d = "down" )
+    selected = pm.ls(sl=1,long=1)
     for member in selected:
         for i in floatAttrName:
-            if cmds.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
-                cmds.deleteAttr(member + '.mtoa_constant_' + i)
+            if pm.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
+                pm.deleteAttr(member + '.mtoa_constant_' + i)
             else:
                 print 'attribute ' + i + ' not exist!'
 
 def addColorAttr(*args):
-    colorAttrName = cmds.textFieldGrp( 'colorText', q = True, text = True ).split(' ')
-    cmds.pickWalk( d = "down" )
-    selected = cmds.ls(sl=1,long=1)
+    colorAttrName = pm.textFieldGrp( 'colorText', q = True, text = True ).split(' ')
+    pm.pickWalk( d = "down" )
+    selected = pm.ls(sl=1,long=1)
     for member in selected:
         for i in colorAttrName:
-            if cmds.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
+            if pm.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
                 print 'attribute ' + i + ' already exist!'
             else:
-                cmds.addAttr(member, ln = "mtoa_constant_" + i, nn = i , uac = 1, at ="float3" )
-                cmds.addAttr(member, ln = "red_" + i, at = "float", p = "mtoa_constant_" + i )
-                cmds.addAttr(member, ln = "grn_" + i, at = "float", p = "mtoa_constant_" + i )
-                cmds.addAttr(member, ln = "blu_" + i, at = "float", p = "mtoa_constant_" + i )
+                pm.addAttr(member, ln = "mtoa_constant_" + i, nn = i , uac = 1, at ="float3" )
+                pm.addAttr(member, ln = "red_" + i, at = "float", p = "mtoa_constant_" + i )
+                pm.addAttr(member, ln = "grn_" + i, at = "float", p = "mtoa_constant_" + i )
+                pm.addAttr(member, ln = "blu_" + i, at = "float", p = "mtoa_constant_" + i )
+                pm.setAttr(member +".mtoa_constant_" + i, randCol())
+                randCol
 
 def delColorAttr(*args):
-    floatAttrName = cmds.textFieldGrp( 'colorText', q = True, text = True ).split(' ')
-    cmds.pickWalk( d = "down" )
-    selected = cmds.ls(sl=1,long=1)
+    floatAttrName = pm.textFieldGrp( 'colorText', q = True, text = True ).split(' ')
+    pm.pickWalk( d = "down" )
+    selected = pm.ls(sl=1,long=1)
     for member in selected:
         for i in floatAttrName:
-            if cmds.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
-                cmds.deleteAttr(member + '.mtoa_constant_' + i)
+            if pm.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
+                pm.deleteAttr(member + '.mtoa_constant_' + i)
             else:
                 print 'attribute ' + i + ' not exist!'
 
 def addIntAttr(*args):
-    stringAttrName = cmds.textFieldGrp( 'intText', q = True, text = True ).split(' ')
-    cmds.pickWalk( d = "down" )
-    selected = cmds.ls(sl=1,long=1)
+    stringAttrName = pm.textFieldGrp( 'intText', q = True, text = True ).split(' ')
+    pm.pickWalk( d = "down" )
+    selected = pm.ls(sl=1,long=1)
     for member in selected:
         for i in stringAttrName:
-            if cmds.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
+            if pm.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
                 print 'attribute ' + i + ' already exist!'
             else:
-                cmds.addAttr(member, ln = "mtoa_constant_" + i, nn = i, at = 'long')
+                pm.addAttr(member, ln = "mtoa_constant_" + i, nn = i, at = 'long')
 
 def delIntAttr(*args):
-    floatAttrName = cmds.textFieldGrp( 'intText', q = True, text = True ).split(' ')
-    cmds.pickWalk( d = "down" )
-    selected = cmds.ls(sl=1,long=1)
+    floatAttrName = pm.textFieldGrp( 'intText', q = True, text = True ).split(' ')
+    pm.pickWalk( d = "down" )
+    selected = pm.ls(sl=1,long=1)
     for member in selected:
         for i in floatAttrName:
-            if cmds.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
-                cmds.deleteAttr(member + '.mtoa_constant_' + i)
+            if pm.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
+                pm.deleteAttr(member + '.mtoa_constant_' + i)
+            else:
+                print 'attribute ' + i + ' not exist!'
+
+def addBoolAttr(*args):
+    stringAttrName = pm.textFieldGrp( 'boolText', q = True, text = True ).split(' ')
+    pm.pickWalk( d = "down" )
+    selected = pm.ls(sl=1,long=1)
+    for member in selected:
+        for i in stringAttrName:
+            if pm.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
+                print 'attribute ' + i + ' already exist!'
+            else:
+                pm.addAttr(member, ln = "mtoa_constant_" + i, nn = i, at = 'bool')
+
+def delBoolAttr(*args):
+    floatAttrName = pm.textFieldGrp( 'boolText', q = True, text = True ).split(' ')
+    pm.pickWalk( d = "down" )
+    selected = pm.ls(sl=1,long=1)
+    for member in selected:
+        for i in floatAttrName:
+            if pm.attributeQuery( "mtoa_constant_" + i, node = member, exists = True ):
+                pm.deleteAttr(member + '.mtoa_constant_' + i)
             else:
                 print 'attribute ' + i + ' not exist!'
 
 def addAll(*agrs):
-    addFloatAttr()
     addStringAttr()
+    addBoolAttr()
     addColorAttr()
+    addFloatAttr()
 
 def delAll(*args):
     delFloatAttr()
     delStringAttr()
     delColorAttr()
+    delBoolAttr()
 
 def windowADD(*args):
+    tw = 250
+    cw = 50
+    fw = 350
+    hw = fw /2
+    fh = 50
 
-    if cmds.window("myWin", exists = 1):
-        cmds.deleteUI("myWin")
-    win = cmds.window("myWin", title = "ADD ATTRIBUTES", w = 400, h = 100, sizeable = 0)
+    if pm.window("myWin", exists = 1):
+        pm.deleteUI("myWin")
+    win = pm.window("myWin", title = "ADD ATTRIBUTES", w = fw, h = 100, sizeable = 0)
 
-    mainLayout = cmds.columnLayout (w =400)
-    myLayout = cmds.rowColumnLayout(w = 400, nc = 3)
+    mainLayout = pm.columnLayout(w=fw)
+    startLayout = pm.rowColumnLayout(cw=((1,tw),(2,cw),(3,cw)),nc = 3,
+                                    cal=((1,'left'),(2,'left'),(3,'left')),
+                                    co=((1,'left',1),(2,'left',1),(3,'left',1)),
+                                    parent=mainLayout)
 
-    cmds.textFieldGrp( 'floatText' , w = 200, text = 'texBump texSpec')
-    cmds.button (label = "ADD FLOAT", w = 100, c = addFloatAttr)
-    cmds.button (label = "DEL FLOAT", w = 100, c = delFloatAttr)
-    cmds.textFieldGrp( 'stringText', w = 200, text = 'texDiff texDisp')
-    cmds.button (label = "ADD STRING", w = 100, c = addStringAttr)
-    cmds.button (label = "DEL STRING", w = 100, c = delStringAttr)
-    cmds.textFieldGrp( 'intText' , w = 200, text = 'lightGroup')
-    cmds.button (label = "ADD INT", w = 100, c = addIntAttr)
-    cmds.button (label = "DEL INT", w = 100, c = delIntAttr)
-    cmds.button (label = 'ADD ALL', w= 400, h = 50, parent = mainLayout, c = addAll)
-    cmds.button (label = 'DELETE ALL', w= 400, h = 50, parent = mainLayout, c = delAll)
+    pm.textFieldGrp( 'stringText', w = tw, text = 'diffTex dispTex emissT sssTex',parent=startLayout)
+    pm.button (label = "ADD S", w = cw, c = addStringAttr)
+    pm.button (label = "DEL S", w = cw, c = delStringAttr)
+    pm.textFieldGrp( 'boolText', w = tw, text = 'diffTexTog')
+    pm.button (label = "ADD B", w = cw, c = addBoolAttr)
+    pm.button (label = "DEL B", w = cw, c = delBoolAttr)
+    pm.textFieldGrp( 'colorText', w = tw, text = 'diffCol specCol emissCol rougCol sssCol')
+    pm.button (label = "ADD C", w = cw, c = addStringAttr)
+    pm.button (label = "DEL C", w = cw, c = delStringAttr)
+    pm.textFieldGrp( 'floatText' , w = tw, text = 'bumpVal specVal iorVal rougVal reflVal refrVal emisVal')
+    pm.button (label = "ADD F", w = cw, c = addFloatAttr)
+    pm.button (label = "DEL F", w = cw, c = delFloatAttr)
+    pm.textFieldGrp( 'intText' , w = tw, text = 'lightGroup istanceID')
+    pm.button (label = "ADD I", w = cw, c = addIntAttr)
+    pm.button (label = "DEL I", w = cw, c = delIntAttr)
 
+    midLayout = pm.rowColumnLayout(cw=((1,hw),(2,hw)),co=((1,'left',1),(2,'left',1)), nc = 2,parent=mainLayout)
 
-    cmds.showWindow(win)
+    pm.button (label = 'ADD ALL', w= hw, h = fh,parent=midLayout, c = addAll)
+    pm.button (label = 'DELETE ALL', w= hw, h = fh,parent=midLayout, c = delAll)
+
+    pm.button (label = 'MASTER MATERIAL', w= fw, h = fh,parent=mainLayout, c = genMat)
+
+    pm.showWindow(win)
+#windowADD()
