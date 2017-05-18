@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'K:/.core/dev/tapp/Tapp/Maya/rigging\resources\dialog.ui'
+# Form implementation generated from reading ui file 'K:/.core/dev/tapp/Tapp/Maya/rigging/resources/dialog.ui'
 #
-# Created: Mon Aug 15 18:32:33 2016
-#      by: Qt UI code generator 5.4
+# Created: Wed Feb 01 16:15:55 2017
+#      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,7 @@ from Qt import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(178, 352)
+        MainWindow.resize(356, 441)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -45,6 +45,20 @@ class Ui_MainWindow(object):
         self.wireColor_pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.wireColor_pushButton.setObjectName("wireColor_pushButton")
         self.central_verticalLayout.addWidget(self.wireColor_pushButton)
+        self.combineCurves_pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.combineCurves_pushButton.setObjectName("combineCurves_pushButton")
+        self.central_verticalLayout.addWidget(self.combineCurves_pushButton)
+        self.pushPullConstraint_pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushPullConstraint_pushButton.setObjectName("pushPullConstraint_pushButton")
+        self.central_verticalLayout.addWidget(self.pushPullConstraint_pushButton)
+        self.shapeAnimationTool_pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.shapeAnimationTool_pushButton.setEnabled(False)
+        self.shapeAnimationTool_pushButton.setObjectName("shapeAnimationTool_pushButton")
+        self.central_verticalLayout.addWidget(self.shapeAnimationTool_pushButton)
+        self.softCluster_pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.softCluster_pushButton.setEnabled(False)
+        self.softCluster_pushButton.setObjectName("softCluster_pushButton")
+        self.central_verticalLayout.addWidget(self.softCluster_pushButton)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.line_3 = QtWidgets.QFrame(self.centralwidget)
@@ -142,6 +156,10 @@ class Ui_MainWindow(object):
         self.zvRadialBlendshape_pushButton.setText(_translate("MainWindow", "Zv Radial Blendshape"))
         self.si_poseDeformer_pushButton.setText(_translate("MainWindow", "si_poseDeformer"))
         self.wireColor_pushButton.setText(_translate("MainWindow", "WireColor"))
+        self.combineCurves_pushButton.setText(_translate("MainWindow", "Combine Curves"))
+        self.pushPullConstraint_pushButton.setText(_translate("MainWindow", "Push Pull Constraint"))
+        self.shapeAnimationTool_pushButton.setText(_translate("MainWindow", "Shape Animation Tool"))
+        self.softCluster_pushButton.setText(_translate("MainWindow", "Soft Cluster"))
         self.label_2.setText(_translate("MainWindow", "Cylinder Preview"))
         self.cylinderPreviewCreate_pushButton.setText(_translate("MainWindow", "Create"))
         self.cylinderPreviewDelete_pushButton.setText(_translate("MainWindow", "Delete"))

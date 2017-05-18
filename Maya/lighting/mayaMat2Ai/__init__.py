@@ -1,5 +1,4 @@
 import maya.cmds as cmds
-import maya.mel as mel
 
 import mayaMat2Ai
 reload(mayaMat2Ai)

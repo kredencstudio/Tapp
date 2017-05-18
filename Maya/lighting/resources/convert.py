@@ -1,3 +1,3 @@
-import Qt.uic
+import PyQt5.uic
 
-Qt.uic.compileUiDir("K:/.core/dev/tapp/Tapp/Maya/lighting/resources/")
+PyQt5.uic.compileUiDir("K:/.core/dev/tapp/Tapp/Maya/lighting/resources/")

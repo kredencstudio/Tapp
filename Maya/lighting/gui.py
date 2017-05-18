@@ -9,6 +9,7 @@ from Qt import QtWidgets
 # from shiboken import wrapInstance
 
 from .resources import dialog
+reload(dialog)
 from Tapp.Maya.lighting.alembic import utils
 import Tapp.Maya.lighting.arnold as mla
 

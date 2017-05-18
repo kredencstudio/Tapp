@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>178</width>
-    <height>352</height>
+    <width>356</width>
+    <height>441</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -87,6 +87,40 @@
        <widget class="QPushButton" name="wireColor_pushButton">
         <property name="text">
          <string>WireColor</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="combineCurves_pushButton">
+        <property name="text">
+         <string>Combine Curves</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushPullConstraint_pushButton">
+        <property name="text">
+         <string>Push Pull Constraint</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="shapeAnimationTool_pushButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Shape Animation Tool</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="softCluster_pushButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Soft Cluster</string>
         </property>
        </widget>
       </item>

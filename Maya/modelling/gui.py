@@ -1,15 +1,15 @@
+from . import utils
+
 import os
 import webbrowser
 
 import maya.cmds as cmds
 import maya.mel as mel
-import maya.OpenMayaUI as omui
 
 from Qt import QtWidgets
 
 from .resources import dialog
-from . import utils
-from . import blendshapes
+reload(dialog)
 
 
 def maya_main_window():
@@ -41,30 +41,27 @@ class Window(QtWidgets.QMainWindow, dialog.Ui_MainWindow):
 
     def create_connections(self):
 
-        self.mirrorBlendshape_pushButton.released.connect(self.on_mirrorBlendshape_pushButton_released)
-        self.UVSymmetry_pushButton.released.connect(self.on_UVSymmetry_pushButton_released)
         self.loadPositionVerts_pushButton.released.connect(self.on_loadPositionVerts_pushButton_released)
         self.loadUpVert_pushButton.released.connect(self.on_loadUpVert_pushButton_released)
         self.create_pushButton.released.connect(self.on_create_pushButton_released)
         self.scatter_pushButton.released.connect(self.on_scatter_pushButton_released)
         self.scatterInfo_pushButton.released.connect(self.on_scatterInfo_pushButton_released)
-        self.symmetry_pushButton.released.connect(self.on_symmetry_pushButton_released)
         self.detachSeparate_pushButton.released.connect(self.on_detachSeparate_pushButton_released)
-        self.roadKill_pushButton.released.connect(self.on_roadKill_pushButton_released)
         self.uvDeluxe_pushButton.released.connect(self.on_uvDeluxe_pushButton_released)
+        self.psdImport_pushButton.released.connect(self.on_psdImport_pushButton_released)
+        self.instanceAlongCurve_pushButton.released.connect(self.on_instanceAlongCurve_pushButton_released)
+        self.rivet_pushButton.released.connect(self.on_rivet_pushButton_released)
+        self.plotCurve_pushButton.released.connect(self.on_plotCurve_pushButton_released)
+        self.edgesToCurves_pushButton.released.connect(self.on_edgesToCurves_pushButton_released)
+        self.curvOnMesh_pushButton.released.connect(self.on_curvOnMesh_pushButton_released)
+        self.curveToPoly_pushButton.released.connect(self.on_curveToPoly_pushButton_released)
+
 
     def on_uvDeluxe_pushButton_released(self):
 
         from UVDeluxe import uvdeluxe
         uvdeluxe.createUI()
 
-    def on_mirrorBlendshape_pushButton_released(self):
-
-        blendshapes.mirrorBlendshape()
-
-    def on_UVSymmetry_pushButton_released(self):
-
-        blendshapes.symmetry()
 
     def on_loadPositionVerts_pushButton_released(self):
 
@@ -158,13 +155,6 @@ class Window(QtWidgets.QMainWindow, dialog.Ui_MainWindow):
 
         webbrowser.open('http://www.braverabbit.de/playground/?p=474')
 
-    def on_symmetry_pushButton_released(self):
-
-        melPath = os.path.dirname(__file__) + '/kk_symmetry.mel'
-        melPath = melPath.replace('\\', '/')
-        mel.eval('source "%s"' % melPath)
-        mel.eval('kk_symmetry')
-
     def on_detachSeparate_pushButton_released(self):
 
         melPath = os.path.dirname(__file__) + '/detachSeparate.mel'
@@ -172,40 +162,43 @@ class Window(QtWidgets.QMainWindow, dialog.Ui_MainWindow):
         mel.eval('source "%s"' % melPath)
         mel.eval('detachSeparate')
 
-    def on_roadKill_pushButton_released(self):
+    def on_psdImport_pushButton_released(self):
 
-        melPath = os.path.dirname(__file__) + '/RoadKill.mel'
+        melPath = os.path.dirname(__file__) + '/enBuild.mel'
         melPath = melPath.replace('\\', '/')
         mel.eval('source "%s"' % melPath)
 
-        #get useLSCM
-        state = self.roadkill_useLSCM_checkBox.checkState()
+    def on_instanceAlongCurve_pushButton_released(self):
+        if not cmds.pluginInfo('instanceAlongCurve.py', query=1, loaded=1):
+            cmds.loadPlugin('instanceAlongCurve.py', quiet=1)
+        mel.eval('instanceAlongCurve')
 
-        if state == 0:
-            LSCMText = '",-abf"'
-        if state == 2:
-            LSCMText = '",-lscm"'
+    def on_rivet_pushButton_released(self):
+        melPath = os.path.dirname(__file__) + '/djRivet.mel'
+        melPath = melPath.replace('\\', '/')
+        mel.eval('source "%s"' % melPath)
+        mel.eval('djRivet')
 
-        #get holesText
-        state = self.roadkill_dontFillHoles_checkBox.checkState()
+    def on_plotCurve_pushButton_released(self):
+        import hart_plotCurve
+        hart_plotCurve.plotCurve()
 
-        if state == 0:
-            holesText = '",-nofillholes"'
-        if state == 2:
-            holesText = '",-fillholes"'
+    def on_edgesToCurves_pushButton_released(self):
+        melPath = os.path.dirname(__file__) + '/rainCurves.mel'
+        melPath = melPath.replace('\\', '/')
+        mel.eval('source "%s"' % melPath)
+        mel.eval('rainCurvesFromEdges')
 
-        #get liveText
-        state = self.roadkill_liveUnwrap_checkBox.checkState()
+    def on_curvOnMesh_pushButton_released(self):
+        import gf_curveOnMeshCtx as cmCtx
+        reload(cmCtx)
+        cmCtx.UI().create()
 
-        if state == 0:
-            liveText = '",-notlive"'
-        if state == 2:
-            liveText = '",-live"'
-
-        exeDir = '"' + os.path.dirname(__file__) + '"'
-        exeDir = exeDir.replace('\\', '/')
-
-        mel.eval('DoUnwrap(%s,%s,%s,%s)' % (LSCMText, holesText, liveText, exeDir))
+    def on_curveToPoly_pushButton_released(self):
+        melPath = os.path.dirname(__file__) + '/da_curveToPoly.mel'
+        melPath = melPath.replace('\\', '/')
+        mel.eval('source "%s"' % melPath)
+        mel.eval('da_curveToPoly')
 
 
 def show():

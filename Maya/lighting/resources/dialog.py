@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'K:/.core/dev/tapp/Tapp/Maya/lighting\resources\dialog.ui'
+# Form implementation generated from reading ui file 'K:/.core/dev/tapp/Tapp/Maya/lighting/resources/dialog.ui'
 #
-# Created: Mon Aug 15 18:32:33 2016
-#      by: Qt UI code generator 5.4
+# Created: Tue Jan 03 18:42:35 2017
+#      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -534,4 +534,3 @@ class Ui_MainWindow(object):
         self.alLightGroup_6_pushButton.setText(_translate("MainWindow", "6"))
         self.alLightGroup_7_pushButton.setText(_translate("MainWindow", "7"))
         self.alLightGroup_8_pushButton.setText(_translate("MainWindow", "8"))
-

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>256</width>
-    <height>616</height>
+    <width>367</width>
+    <height>591</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -66,7 +66,7 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>40</height>
+        <height>20</height>
        </size>
       </property>
       <property name="font">
@@ -92,7 +92,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>40</height>
+          <height>20</height>
          </size>
         </property>
         <property name="font">
@@ -116,7 +116,7 @@
         <property name="minimumSize">
          <size>
           <width>30</width>
-          <height>25</height>
+          <height>15</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -143,7 +143,7 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>40</height>
+        <height>20</height>
        </size>
       </property>
       <property name="font">
@@ -157,166 +157,46 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_9">
-      <item>
-       <widget class="Line" name="line_12">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>UV-Destructive</string>
-        </property>
-        <property name="scaledContents">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="line_13">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QPushButton" name="symmetry_pushButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
+     <widget class="QPushButton" name="instanceAlongCurve_pushButton">
       <property name="text">
-       <string>Symmetry</string>
+       <string>Instance Along Curve</string>
       </property>
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_8">
-      <item>
-       <widget class="Line" name="line_10">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>UV-Preserving</string>
-        </property>
-        <property name="scaledContents">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="line_11">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QPushButton" name="rivet_pushButton">
+      <property name="text">
+       <string>Rivet</string>
+      </property>
+     </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QPushButton" name="mirrorBlendshape_pushButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>10</pointsize>
-         </font>
-        </property>
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select all blendshapes first, then the original mesh last!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="text">
-         <string>Mirror Blendshape</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="UVSymmetry_pushButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>10</pointsize>
-         </font>
-        </property>
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the edited mesh first, then the original mesh last!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="text">
-         <string>Symmetry</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QPushButton" name="curvOnMesh_pushButton">
+      <property name="text">
+       <string>Draw Curve on Mesh</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="plotCurve_pushButton">
+      <property name="text">
+       <string>Hart Plot Curve</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="edgesToCurves_pushButton">
+      <property name="text">
+       <string>Edges to Curves</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="curveToPoly_pushButton">
+      <property name="text">
+       <string>Curve to Poly</string>
+      </property>
+     </widget>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -371,7 +251,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>40</height>
+          <height>20</height>
          </size>
         </property>
         <property name="text">
@@ -407,7 +287,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>40</height>
+          <height>20</height>
          </size>
         </property>
         <property name="text">
@@ -475,7 +355,7 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>40</height>
+        <height>30</height>
        </size>
       </property>
       <property name="font">
@@ -506,7 +386,7 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>RoadKill</string>
+         <string>PSD Import</string>
         </property>
         <property name="scaledContents">
          <bool>false</bool>
@@ -531,51 +411,19 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QCheckBox" name="roadkill_useLSCM_checkBox">
-        <property name="text">
-         <string>Use LSCM</string>
+       <widget class="QPushButton" name="psdImport_pushButton">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="roadkill_dontFillHoles_checkBox">
         <property name="text">
-         <string>Don't Fill Holes</string>
+         <string>Import prepared layers</string>
         </property>
        </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="roadkill_liveUnwrap_checkBox">
-      <property name="text">
-       <string>Live Unwrap</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="roadKill_pushButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Unwrap</string>
-      </property>
-     </widget>
     </item>
     <item>
      <spacer name="verticalSpacer">

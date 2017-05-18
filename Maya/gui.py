@@ -5,8 +5,8 @@ import maya.cmds as cmds
 
 import Tapp.Maya.lighting.gui as lighting
 reload(lighting)
-# import Tapp.Maya.animation.gui as animation
-# reload(animation)
+import Tapp.Maya.animation.gui as animation
+reload(animation)
 import Tapp.Maya.rigging.gui as rigging
 reload(rigging)
 import Tapp.Maya.modelling.gui as modelling
@@ -36,7 +36,7 @@ class Window(QtWidgets.QDialog):
 
         self.main_tabs.addTab(modelling.Window(), 'Modelling')
         self.main_tabs.addTab(rigging.Window(), 'Rigging')
-        # self.main_tabs.addTab(animation.Window(), 'Animation')
+        self.main_tabs.addTab(animation.Window(), 'Animation')
         self.main_tabs.addTab(lighting.Window(), 'Lighting')
 
     def show(self):

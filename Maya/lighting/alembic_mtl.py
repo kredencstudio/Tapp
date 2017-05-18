@@ -39,6 +39,7 @@ class AssignShapeMtl():
         clean_list = list(set(all_list))
         #print 'clean_list', clean_list
         for sh in clean_list:
+            print sh
             shapes = cmds.listRelatives(sh, s=1, pa=1)
             sdata = shapeData()
             sdata.full_name = sh
@@ -109,7 +110,7 @@ class AssignShapeMtl():
                 print 'g mode'
                 clean_list = [x.replace(shaded_.full_shape, default_.full_shape) for x in sel_list
                               if shaded_.shape in x]
-            #print 'clean', clean_list
+            print 'clean', clean_list
             cmds.select(clean_list)
             cmds.hyperShade(assign=sh)
 
