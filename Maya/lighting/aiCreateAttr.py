@@ -29,13 +29,14 @@ def genMat(*args):
         rn1 = rand.uniform(0,1)
         rn2 = rand.uniform(0,1)
         rn3 = rand.uniform(0,1)
-        masterMat = pm.shadingNode( 'aiStandard',name=matName, asShader=True )
-        pm.setAttr ( (masterMat + '.color'), rn1, rn2, rn3, type = 'double3' )
+        masterMat = pm.shadingNode( 'aiStandardSurface',name=matName, asShader=True )
+        pm.setAttr ( (masterMat + '.baseColor'), randCol(), type = 'double3' )
 
         diffTexStr = pm.shadingNode('aiUserDataString', name='diffTexAttr',asUtility=True)
         pm.setAttr ((diffTexStr + '.stringAttrName'), 'diffTex', type = 'string')
         diffTexFile = pm.shadingNode('file', name='diffTexFile',asTexture=True)
         pm.connectAttr((diffTexStr +'.outValue'), (diffTexFile +'.fileTextureName'))
+
         diffTexCol = pm.shadingNode('aiUserDataColor', name='diffColAttr',asTexture=True)
         pm.setAttr ((diffTexCol + '.colorAttrName'), 'diffCol', type = 'string')
         pm.setAttr ((diffTexCol + '.defaultValue'), (rand.uniform(0,1)),(rand.uniform(0,1)),(rand.uniform(0,1)), type = 'double3')
@@ -50,14 +51,13 @@ def genMat(*args):
         pm.connectAttr((diffTexBool +'.outValue'), (diffTexSwitch +'.condition'))
 
 
-        pm.connectAttr((diffTexSwitch +'.outColor'), (masterMat +'.color'))
+        pm.connectAttr((diffTexSwitch +'.outColor'), (masterMat +'.baseColor'))
         pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityR'))
         pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityG'))
         pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityB'))
 
-        masterMatShadingGroup=pm.shadingNode('shadingEngine',name=(masterMat + '_SG'),asShader=True)
-
-        pm.connectAttr((masterMat +'.outColor'), (masterMatShadingGroup +'.surfaceShader'))
+        #masterMatShadingGroup=pm.shadingNode('shadingEngine',name=(masterMat + '_SG'),asShader=True)
+        #pm.connectAttr((masterMat +'.outColor'), (masterMatShadingGroup +'.surfaceShader'))
     else:
         masterMat = existAttrMat[0]
     for member in selected:
