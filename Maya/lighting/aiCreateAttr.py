@@ -54,6 +54,10 @@ def genMat(*args):
         pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityR'))
         pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityG'))
         pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityB'))
+
+        masterMatShadingGroup=pm.shadingNode('shadingEngine',name=(masterMat + '_SG'),asShader=True)
+
+        pm.connectAttr((masterMat +'.outColor'), (masterMatShadingGroup +'.surfaceShader'))
     else:
         masterMat = existAttrMat[0]
     for member in selected:
