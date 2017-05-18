@@ -51,7 +51,9 @@ def genMat(*args):
 
 
         pm.connectAttr((diffTexSwitch +'.outColor'), (masterMat +'.color'))
-        pm.connectAttr((diffTexSwitch +'.outTransparency'), (masterMat +'.opacity'))
+        pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityR'))
+        pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityG'))
+        pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityB'))
     else:
         masterMat = existAttrMat[0]
     for member in selected:
