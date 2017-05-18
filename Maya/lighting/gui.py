@@ -163,6 +163,7 @@ class Window(QtWidgets.QMainWindow, dialog.Ui_MainWindow):
     def on_arnoldAddAttrs_pushButton_released(self):
 
         import Tapp.Maya.lighting.aiCreateAttr as aiAttr
+        reload(aiAttr)
         aiAttr.windowADD()
 
     def on_arnoldLoad_pushButton_released(self):
