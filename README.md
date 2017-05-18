@@ -22,6 +22,9 @@ You can find all the documentation for the Tapp tools here: https://github.com/B
 - Maya 2014 or higher
 - Nuke 6.3 or higher
 
+MICHAL
+
+
 ## CREDITS
 
 - Ian Waters; addRimLight
