@@ -29,25 +29,45 @@ def genMat(*args):
         rn1 = rand.uniform(0,1)
         rn2 = rand.uniform(0,1)
         rn3 = rand.uniform(0,1)
+        # create master material andol 5
         masterMat = pm.shadingNode( 'aiStandardSurface',name=matName, asShader=True )
         pm.setAttr ( (masterMat + '.baseColor'), randCol(), type = 'double3' )
 
+        #create vrtx col hook and boolean
+        diffVrtx = pm.shadingNode('aiUserDataColor', name='diffVrtxAttr',asTexture=True)
+        pm.setAttr ((diffVrtx + '.colorAttrName'), 'colorSet1', type = 'string')
+        pm.setAttr ((diffVrtx + '.defaultValue'), (rand.uniform(0,1)),(rand.uniform(0,1)),(rand.uniform(0,1)), type = 'double3')
+        # create diff col attr
+        diffCol = pm.shadingNode('aiUserDataColor', name='diffColAttr',asTexture=True)
+        pm.setAttr ((diffCol + '.colorAttrName'), 'diffCol', type = 'string')
+        pm.setAttr ((diffCol + '.defaultValue'), (rand.uniform(0,1)),(rand.uniform(0,1)),(rand.uniform(0,1)), type = 'double3')
+        # bool attribute for vrtx diff
+        diffVrtxBool = pm.shadingNode('aiUserDataBool', name='diffVrtxBool',asUtility=True)
+        pm.setAttr ((diffVrtxBool + '.boolAttrName'), 'diffVrtxTog', type = 'string')
+        pm.setAttr ((diffVrtxBool + '.defaultValue'), False)
+        # switch between diff col and dif vrtx
+        diffColSwitch = pm.shadingNode('colorCondition', name='useDiffVrtx',asUtility=True)
+        pm.connectAttr((diffVrtx +'.outColor'), (diffColSwitch +'.colorA'))
+        pm.connectAttr((diffVrtx +'.outTransparencyR'), (diffColSwitch +'.alphaA'))
+        pm.connectAttr((diffCol +'.outColor'), (diffColSwitch +'.colorB'))
+        pm.connectAttr((diffCol +'.outTransparencyR'), (diffColSwitch +'.alphaB'))
+        pm.connectAttr((diffVrtxBool +'.outValue'), (diffColSwitch +'.condition'))
+
+        #create difftex attribute and empty texture file
         diffTexStr = pm.shadingNode('aiUserDataString', name='diffTexAttr',asUtility=True)
         pm.setAttr ((diffTexStr + '.stringAttrName'), 'diffTex', type = 'string')
         diffTexFile = pm.shadingNode('file', name='diffTexFile',asTexture=True)
         pm.connectAttr((diffTexStr +'.outValue'), (diffTexFile +'.fileTextureName'))
-
-        diffTexCol = pm.shadingNode('aiUserDataColor', name='diffColAttr',asTexture=True)
-        pm.setAttr ((diffTexCol + '.colorAttrName'), 'diffCol', type = 'string')
-        pm.setAttr ((diffTexCol + '.defaultValue'), (rand.uniform(0,1)),(rand.uniform(0,1)),(rand.uniform(0,1)), type = 'double3')
+        # bool and switch attribute after vrtx col vs attr col to diff tex
         diffTexBool = pm.shadingNode('aiUserDataBool', name='diffTexBool',asUtility=True)
         pm.setAttr ((diffTexBool + '.boolAttrName'), 'diffTexTog', type = 'string')
         pm.setAttr ((diffTexBool + '.defaultValue'), False)
+        # switch between diff atr branch and dif file
         diffTexSwitch = pm.shadingNode('colorCondition', name='useDiffTex',asUtility=True)
         pm.connectAttr((diffTexFile +'.outColor'), (diffTexSwitch +'.colorA'))
         pm.connectAttr((diffTexFile +'.outAlpha'), (diffTexSwitch +'.alphaA'))
-        pm.connectAttr((diffTexCol +'.outColor'), (diffTexSwitch +'.colorB'))
-        pm.connectAttr((diffTexCol +'.outTransparencyR'), (diffTexSwitch +'.alphaB'))
+        pm.connectAttr((diffColSwitch +'.outColor'), (diffTexSwitch +'.colorB'))
+        pm.connectAttr((diffColSwitch +'.outAlpha'), (diffTexSwitch +'.alphaB'))
         pm.connectAttr((diffTexBool +'.outValue'), (diffTexSwitch +'.condition'))
 
 
@@ -217,7 +237,7 @@ def windowADD(*args):
     pm.textFieldGrp( 'stringText', w = tw, text = 'diffTex dispTex emissT sssTex',parent=startLayout)
     pm.button (label = "ADD S", w = cw, c = addStringAttr)
     pm.button (label = "DEL S", w = cw, c = delStringAttr)
-    pm.textFieldGrp( 'boolText', w = tw, text = 'diffTexTog')
+    pm.textFieldGrp( 'boolText', w = tw, text = 'diffTexTog diffVrtxTog')
     pm.button (label = "ADD B", w = cw, c = addBoolAttr)
     pm.button (label = "DEL B", w = cw, c = delBoolAttr)
     pm.textFieldGrp( 'colorText', w = tw, text = 'diffCol specCol emissCol rougCol sssCol')
