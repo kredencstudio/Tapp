@@ -22,6 +22,7 @@ def genMat(*args):
     selected = pm.ls(sl=1,long=1)
 
     matName= 'master_attr_mat'
+    proxyName= 'proxy_attr_mat'
     existAttrMat = pm.ls((matName),materials=True)
     masterMat = False
 
@@ -32,6 +33,7 @@ def genMat(*args):
         # create master material andol 5
         masterMat = pm.shadingNode( 'aiStandardSurface',name=matName, asShader=True )
         pm.setAttr ( (masterMat + '.baseColor'), randCol(), type = 'double3' )
+        proxyMat = pm.shadingNode( 'lambert',name=proxyName, asShader=True )
 
         #create vrtx col hook and boolean
         diffVrtx = pm.shadingNode('aiUserDataColor', name='diffVrtxAttr',asTexture=True)
@@ -70,14 +72,20 @@ def genMat(*args):
         pm.connectAttr((diffColSwitch +'.outAlpha'), (diffTexSwitch +'.alphaB'))
         pm.connectAttr((diffTexBool +'.outValue'), (diffTexSwitch +'.condition'))
 
-
         pm.connectAttr((diffTexSwitch +'.outColor'), (masterMat +'.baseColor'))
         pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityR'))
         pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityG'))
         pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityB'))
 
-        #masterMatShadingGroup=pm.shadingNode('shadingEngine',name=(masterMat + '_SG'),asShader=True)
-        #pm.connectAttr((masterMat +'.outColor'), (masterMatShadingGroup +'.surfaceShader'))
+        pm.connectAttr((diffTexSwitch +'.outColor'), (proxyMat +'.color'))
+        pm.connectAttr((diffTexSwitch +'.outAlpha'), (proxyMat +'.transparencyR'))
+        pm.connectAttr((diffTexSwitch +'.outAlpha'), (proxyMat +'.transparencyG'))
+        pm.connectAttr((diffTexSwitch +'.outAlpha'), (proxyMat +'.transparencyB'))
+
+        masterMatShadingGroup=pm.shadingNode('shadingEngine',name=(masterMat + '_SG'),asShader=True)
+        #addMember
+        pm.connectAttr((proxyMat +'.outColor'), (masterMatShadingGroup +'.surfaceShader'))
+        pm.connectAttr((masterMat +'.outColor'), (masterMatShadingGroup +'.aiSurfaceShader'))
     else:
         masterMat = existAttrMat[0]
     for member in selected:
@@ -88,8 +96,19 @@ def genMat(*args):
 #genMat()
 
 
-def connectMat(*args):
-    pass
+def assignMat(*args):
+    selected = pm.ls(sl=1,long=1)
+    matName= 'master_attr_mat'
+    existAttrMat = pm.ls((matName),materials=True)
+    masterMat = False
+    if (len(existAttrMat) ==0):
+        genMat()
+        masterMat = (pm.ls((matName),materials=True))[0]
+    else:
+        masterMat = existAttrMat[0]
+    for member in selected:
+    	pm.select(member)
+        pm.hyperShade(member,assign=masterMat )
 
 def addFloatAttr(*args):
     floatAttrName = pm.textFieldGrp( 'floatText', q = True, text = True ).split(' ')
@@ -255,7 +274,8 @@ def windowADD(*args):
     pm.button (label = 'ADD ALL', w= hw, h = fh,parent=midLayout, c = addAll)
     pm.button (label = 'DELETE ALL', w= hw, h = fh,parent=midLayout, c = delAll)
 
-    pm.button (label = 'MASTER MATERIAL', w= fw, h = fh,parent=mainLayout, c = genMat)
+    pm.button (label = 'MASTER MATERIAL gen + assing', w= fw, h = fh,parent=mainLayout, c = genMat)
+    pm.button (label = 'MASTER MATERIAL assing', w= fw, h = fh,parent=mainLayout, c = assignMat)
 
     pm.showWindow(win)
 #windowADD()
