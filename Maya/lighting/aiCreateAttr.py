@@ -55,19 +55,35 @@ def genMat(*args):
         pm.connectAttr((diffCol +'.outTransparencyR'), (diffColSwitch +'.alphaB'))
         pm.connectAttr((diffVrtxBool +'.outValue'), (diffColSwitch +'.condition'))
 
-        #create difftex attribute and empty texture file
+        #create difftex attribute and empty texture file and udim attr
         diffTexStr = pm.shadingNode('aiUserDataString', name='diffTexAttr',asUtility=True)
         pm.setAttr ((diffTexStr + '.stringAttrName'), 'diffTex', type = 'string')
+        # diff tex udim
+        diffUdimBool = pm.shadingNode('aiUserDataBool', name='diffUdimBool',asUtility=True)
+        pm.setAttr ((diffUdimBool + '.boolAttrName'), 'diffUdim', type = 'string')
+        pm.setAttr ((diffUdimBool + '.defaultValue'), False)
+        #diff file
         diffTexFile = pm.shadingNode('file', name='diffTexFile',asTexture=True)
         pm.connectAttr((diffTexStr +'.outValue'), (diffTexFile +'.fileTextureName'))
-        # bool and switch attribute after vrtx col vs attr col to diff tex
+        #diff file udimm
+        diffTexFileUdim = pm.shadingNode('file', name='diffTexFileUdim',asTexture=True)
+        pm.setAttr((diffTexFileUdim +'.uvTilingMode'),3)
+        pm.connectAttr((diffTexStr +'.outValue'), (diffTexFileUdim +'.fileTextureName'))
+        #switch between tex and udim tex
+        diffTexUdimSwitch = pm.shadingNode('colorCondition', name='useDiffUdimTex',asUtility=True)
+        pm.connectAttr((diffTexFile +'.outColor'), (diffTexUdimSwitch +'.colorA'))
+        pm.connectAttr((diffTexFile +'.outAlpha'), (diffTexUdimSwitch +'.alphaA'))
+        pm.connectAttr((diffTexFileUdim +'.outColor'), (diffTexUdimSwitch +'.colorB'))
+        pm.connectAttr((diffTexFileUdim +'.outAlpha'), (diffTexUdimSwitch +'.alphaB'))
+        pm.connectAttr((diffUdimBool +'.outValue'), (diffTexUdimSwitch +'.condition'))
+        # bool for diff tex
         diffTexBool = pm.shadingNode('aiUserDataBool', name='diffTexBool',asUtility=True)
         pm.setAttr ((diffTexBool + '.boolAttrName'), 'diffTexTog', type = 'string')
         pm.setAttr ((diffTexBool + '.defaultValue'), False)
         # switch between diff atr branch and dif file
         diffTexSwitch = pm.shadingNode('colorCondition', name='useDiffTex',asUtility=True)
-        pm.connectAttr((diffTexFile +'.outColor'), (diffTexSwitch +'.colorA'))
-        pm.connectAttr((diffTexFile +'.outAlpha'), (diffTexSwitch +'.alphaA'))
+        pm.connectAttr((diffTexUdimSwitch +'.outColor'), (diffTexSwitch +'.colorA'))
+        pm.connectAttr((diffTexUdimSwitch +'.outAlpha'), (diffTexSwitch +'.alphaA'))
         pm.connectAttr((diffColSwitch +'.outColor'), (diffTexSwitch +'.colorB'))
         pm.connectAttr((diffColSwitch +'.outAlpha'), (diffTexSwitch +'.alphaB'))
         pm.connectAttr((diffTexBool +'.outValue'), (diffTexSwitch +'.condition'))
@@ -78,9 +94,9 @@ def genMat(*args):
         pm.connectAttr((diffTexSwitch +'.outAlpha'), (masterMat +'.opacityB'))
 
         pm.connectAttr((diffTexSwitch +'.outColor'), (proxyMat +'.color'))
-        pm.connectAttr((diffTexSwitch +'.outAlpha'), (proxyMat +'.transparencyR'))
-        pm.connectAttr((diffTexSwitch +'.outAlpha'), (proxyMat +'.transparencyG'))
-        pm.connectAttr((diffTexSwitch +'.outAlpha'), (proxyMat +'.transparencyB'))
+        #pm.connectAttr((diffTexSwitch +'.outAlpha'), (proxyMat +'.transparencyR'))
+        #pm.connectAttr((diffTexSwitch +'.outAlpha'), (proxyMat +'.transparencyG'))
+        #pm.connectAttr((diffTexSwitch +'.outAlpha'), (proxyMat +'.transparencyB'))
 
         masterMatShadingGroup=pm.shadingNode('shadingEngine',name=(masterMat + '_SG'),asShader=True)
         #addMember
@@ -253,19 +269,19 @@ def windowADD(*args):
                                     co=((1,'left',1),(2,'left',1),(3,'left',1)),
                                     parent=mainLayout)
 
-    pm.textFieldGrp( 'stringText', w = tw, text = 'diffTex dispTex emissT sssTex',parent=startLayout)
+    pm.textFieldGrp( 'stringText', w = tw, text = 'diffTex',parent=startLayout)
     pm.button (label = "ADD S", w = cw, c = addStringAttr)
     pm.button (label = "DEL S", w = cw, c = delStringAttr)
-    pm.textFieldGrp( 'boolText', w = tw, text = 'diffTexTog diffVrtxTog')
+    pm.textFieldGrp( 'boolText', w = tw, text = 'diffTexTog diffUdim diffVrtxTog')
     pm.button (label = "ADD B", w = cw, c = addBoolAttr)
     pm.button (label = "DEL B", w = cw, c = delBoolAttr)
-    pm.textFieldGrp( 'colorText', w = tw, text = 'diffCol specCol emissCol rougCol sssCol')
-    pm.button (label = "ADD C", w = cw, c = addStringAttr)
-    pm.button (label = "DEL C", w = cw, c = delStringAttr)
-    pm.textFieldGrp( 'floatText' , w = tw, text = 'bumpVal specVal iorVal rougVal reflVal refrVal emisVal')
+    pm.textFieldGrp( 'colorText', w = tw, text = 'diffCol')
+    pm.button (label = "ADD C", w = cw, c = addColorAttr)
+    pm.button (label = "DEL C", w = cw, c = delColorAttr)
+    pm.textFieldGrp( 'floatText' , w = tw, text = 'emptyVal')
     pm.button (label = "ADD F", w = cw, c = addFloatAttr)
     pm.button (label = "DEL F", w = cw, c = delFloatAttr)
-    pm.textFieldGrp( 'intText' , w = tw, text = 'lightGroup istanceID')
+    pm.textFieldGrp( 'intText' , w = tw, text = 'instanceID')
     pm.button (label = "ADD I", w = cw, c = addIntAttr)
     pm.button (label = "DEL I", w = cw, c = delIntAttr)
 
