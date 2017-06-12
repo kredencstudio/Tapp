@@ -153,10 +153,13 @@ def setIdColor(color, layerNum):
     shapes = []
     for s in sel:
         try:
-            s = s.getShape()
+            #s = s.getShape()
+            shps = pm.listRelatives(s, shapes=True)
+            for sh in shps:
+                shapes.append(sh)
         except:
             pass
-        shapes.append(s)
+        #shapes.append(s)
 
     if not pm.objExists(layerName):
         makeIdSets(layerNum)
@@ -231,19 +234,23 @@ def MaskFlush():
 def clearIDs():
 
     sel = pm.ls(sl=True)
-
+    shapes = []
     for node in sel:
         try:
-            node = node.getShape()
+            #node = node.getShape()
+            nodes = pm.listRelatives(node, shapes=True)
+            for sh in shps:
+                shapes.append(sh)
         except:
            pass
-        attrs = node.listAttr(ud=True, m=True)
+   for n in nodes:
+        attrs = n.listAttr(ud=True, m=True)
         for attr in attrs:
             if 'mtoa_constant_aiMask' in attr.name():
                 print attr
                 attr.delete()
-        node.overrideEnabled.set(False)
-        node.overrideColor.set(5)
+        n.overrideEnabled.set(False)
+        n.overrideColor.set(5)
 
 
 def addAOVlightGroup(lightGroup):
