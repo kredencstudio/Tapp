@@ -237,12 +237,11 @@ def clearIDs():
     shapes = []
     for node in sel:
         try:
-            #node = node.getShape()
             nodes = pm.listRelatives(node, shapes=True)
             for sh in shps:
                 shapes.append(sh)
         except:
-           pass
+            pass
    for n in nodes:
         attrs = n.listAttr(ud=True, m=True)
         for attr in attrs:

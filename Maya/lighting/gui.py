@@ -123,7 +123,6 @@ class Window(QtWidgets.QMainWindow, dialog.Ui_MainWindow):
 
         color = self.sender().text().lower()
         layer = self.arnoldIdLayer_spinBox.value()
-
         reload(mla)
         mla.setIdColor(color, layer)
 
