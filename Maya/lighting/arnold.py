@@ -1,8 +1,7 @@
 import maya.cmds as cmds
 import pymel.core as pm
-
-
 import mtoa.core as core
+
 
 def loadArnold():
     cmds.loadPlugin('mtoa.mll', quiet=True)
@@ -11,16 +10,17 @@ def loadArnold():
 
 
 def aiSetSubd(aiSubdType):
-    cmds.pickWalk( d = "down" )
+    cmds.pickWalk(d="down")
     sel = cmds.ls(selection=True, dag=True, lf=True, type='mesh')
     for i in sel:
-        cmds.setAttr( i + '.aiSubdivType', aiSubdType)
+        cmds.setAttr(i + '.aiSubdivType', aiSubdType)
+
 
 def aiSetIter(iterValue):
-    cmds.pickWalk( d = "down" )
+    cmds.pickWalk(d="down")
     sel = cmds.ls(selection=True, dag=True, lf=True, type='mesh')
     for i in sel:
-        cmds.setAttr( i + '.aiSubdivIterations', iterValue)
+        cmds.setAttr(i + '.aiSubdivIterations', iterValue)
 
 
 def MaskBuild():
@@ -65,10 +65,9 @@ def MaskBuild():
 
         addAOV(layer, aiColor)
 
+
 def addIdShader(layer):
-
     aiColorName = layer + '_aiUserDataColor'
-
     try:
         aiColor = pm.PyNode(aiColorName)
         print "aiColor Exists"
@@ -76,19 +75,18 @@ def addIdShader(layer):
         aiColor = cmds.shadingNode('aiUserDataColor', asShader=1, n=aiColorName)
         cmds.setAttr(aiColor + '.colorAttrName', layer, typ='string')
         print "aiColor was created"
-
-
-
     return aiColor
 
 def addAOV(layer, aiColor):
     # AOV
     aovListSize = cmds.getAttr('defaultArnoldRenderOptions.aovList', s=1)
-
     aov_name = 'aiAOV_' + layer
-
     if cmds.objExists(aov_name):
         customAOV = aov_name
+        try:
+            cmds.connectAttr(aiColor + '.outColor', customAOV + '.defaultValue', f=1)
+        except:
+            pass
         print "AOV Exists"
     else:
         customAOV = cmds.createNode('aiAOV',
@@ -99,7 +97,6 @@ def addAOV(layer, aiColor):
         cmds.connectAttr(customAOV + '.message',
                          'defaultArnoldRenderOptions.aovList[' + str(aovListSize) + ']',
                          f=1)
-
         cmds.connectAttr('defaultArnoldDriver.message',
                          customAOV + '.outputs[0].driver', f=1)
         cmds.connectAttr('defaultArnoldFilter.message',
@@ -113,14 +110,12 @@ def addAOV(layer, aiColor):
     return customAOV
 
 
-def addColor(node, layer, color): #create color attribute
-
+def addColor(node, layer, color):
+    #create color attribute
     colorAttrName = layer
     colorAttrNameLong = 'mtoa_constant_' + colorAttrName
-
     if node.hasAttr(colorAttrNameLong):
         node.deleteAttr(colorAttrNameLong)
-
     node.addAttr(colorAttrNameLong, niceName=colorAttrName, usedAsColor=True, attributeType='float3')
     node.addAttr('R' + str(colorAttrName), attributeType='float', parent=colorAttrNameLong)
     node.addAttr('G' + str(colorAttrName), attributeType='float', parent=colorAttrNameLong)
@@ -132,19 +127,15 @@ def addColor(node, layer, color): #create color attribute
         'blue': [(0, 0, 1), 6]
         }
     node.setAttr(colorAttrNameLong, colors[color][0])
-
     node.overrideEnabled.set(True)
     node.overrideColor.set(colors[color][1])
-
     return colorAttrNameLong
 
 
 def setIdColor(color, layerNum):
     sel = pm.ls(sl=True)
-
     layerName = 'aiMask' + str(layerNum)
     colorLayerName = '{}*{}'.format(layerName, color)
-
     layerNodes = pm.ls('*aiMask*')
     layerSets = pm.ls(layerNodes, sets=True)
     layerAOV = pm.ls(layerNodes, typ='aiAOV')
@@ -153,7 +144,6 @@ def setIdColor(color, layerNum):
     shapes = []
     for s in sel:
         try:
-            #s = s.getShape()
             shps = pm.listRelatives(s, shapes=True)
             for sh in shps:
                 shapes.append(sh)
@@ -171,16 +161,13 @@ def setIdColor(color, layerNum):
     colorSet = pm.ls(colorLayerName, sets=True)[0]
 
     for s in shapes:
-
         for l in layerSets:
             try:
                 l.remove(s)
             except:
                 pass
-
         colorSet.add(s)
         colorSet.forceElement(s)
-
         addColor(s, layerName, color)
 
     aiColor = addIdShader(layerName)
@@ -193,33 +180,25 @@ def checkMaskLayers(*args):#check existing ids to create proper nubers for next 
     for set in objsets:
         if '_' not in set.name():
             layers.append(set)
-
     i = len(layers) + 1
-
     return i
 
-def makeIdSets(i=None):
 
+def makeIdSets(i=None):
     if not i:
         i = checkMaskLayers()
-
     sel = pm.ls(sl=True)
     pm.select(clear=True)
-
     name = 'aiMask' + str(i)
-
     rSet = pm.sets(n=name + '_red')
     gSet = pm.sets(n=name + '_green')
     bSet = pm.sets(n=name + '_blue')
-
     pm.sets(rSet, gSet, bSet, n=name)
-
     pm.select(sel)
-
     return rSet, gSet, bSet
 
-def MaskFlush():
 
+def MaskFlush():
     aovs = cmds.ls(type='aiAOV')
     nodes = []
     for aov in aovs:
@@ -231,18 +210,18 @@ def MaskFlush():
     if nodes:
         cmds.delete(nodes)
 
-def clearIDs():
 
+def clearIDs():
     sel = pm.ls(sl=True)
     shapes = []
     for node in sel:
         try:
             nodes = pm.listRelatives(node, shapes=True)
-            for sh in shps:
+            for sh in nodes:
                 shapes.append(sh)
         except:
             pass
-   for n in nodes:
+    for n in nodes:
         attrs = n.listAttr(ud=True, m=True)
         for attr in attrs:
             if 'mtoa_constant_aiMask' in attr.name():
@@ -255,7 +234,6 @@ def clearIDs():
 def addAOVlightGroup(lightGroup):
     # AOV
     aovListSize = cmds.getAttr('defaultArnoldRenderOptions.aovList', s=1)
-
     name = 'light_group_' + lightGroup
     aov_name = 'aiAOV_light_group_' + name
 
@@ -268,11 +246,9 @@ def addAOVlightGroup(lightGroup):
                                     skipSelect=True)
         cmds.setAttr(customAOV + '.name', name,
                      type='string')
-
         cmds.connectAttr(customAOV + '.message',
                          'defaultArnoldRenderOptions.aovList[' + str(aovListSize) + ']',
                          f=1)
-
         cmds.connectAttr('defaultArnoldDriver.message',
                          customAOV + '.outputs[0].driver', f=1)
         cmds.connectAttr('defaultArnoldFilter.message',
@@ -302,6 +278,5 @@ def addToLightGroup(lightGroup):
 
 
 def Mask():
-
     MaskFlush()
     MaskBuild()
