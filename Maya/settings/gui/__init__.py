@@ -128,7 +128,7 @@ class Form(base,form):
         
 def show():
     #closing previous dialog
-    for widget in QtGui.qApp.allWidgets():
+    for widget in QtGui.QApplication.allWidgets():
         if widget.objectName()=='tapp_settings':
             widget.close()
     

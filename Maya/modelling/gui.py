@@ -14,7 +14,7 @@ reload(dialog)
 
 def maya_main_window():
     """Return Maya's main window"""
-    for obj in QtWidgets.qApp.topLevelWidgets():
+    for obj in QtWidgets.QApplication.topLevelWidgets():
         if obj.objectName() == 'MayaWindow':
             return obj
     raise RuntimeError('Could not find MayaWindow instance')
@@ -203,7 +203,7 @@ class Window(QtWidgets.QMainWindow, dialog.Ui_MainWindow):
 
 def show():
     #closing previous dialog
-    for widget in QtGui.qApp.allWidgets():
+    for widget in QtGui.QApplication.allWidgets():
         if widget.objectName() == 'tapp_modelling':
             widget.close()
 

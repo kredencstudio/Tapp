@@ -15,7 +15,7 @@ import maya.mel as mel
 
 def maya_main_window():
     """Return Maya's main window"""
-    for obj in QtWidgets.qApp.topLevelWidgets():
+    for obj in QtWidgets.QApplication.topLevelWidgets():
         if obj.objectName() == 'MayaWindow':
             return obj
     raise RuntimeError('Could not find MayaWindow instance')

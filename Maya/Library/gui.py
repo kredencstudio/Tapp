@@ -119,7 +119,7 @@ class Form(QtGui.QDialog):
 
 def show():
     #closing previous dialog
-    for widget in QtGui.qApp.allWidgets():
+    for widget in QtGui.QApplication.allWidgets():
         if widget.objectName()=='tmLibrary':
             widget.close()
     
